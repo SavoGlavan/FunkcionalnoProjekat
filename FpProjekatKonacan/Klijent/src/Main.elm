@@ -265,9 +265,9 @@ update msg model =
 subscriptions : model -> Sub Msg
 subscriptions _ =
     Sub.none
-
-
-
+yellow=E.rgb255 0xff 0xd6 0x00
+red=E.rgb255 255 0 0
+blue=E.rgb255 0 0 255
 viewLayout : Model -> Html.Html Msg
 viewLayout model =
     E.layoutWith
@@ -279,12 +279,16 @@ viewLayout model =
                 }
             ]
         }
-        []
-        (E.column [
-            E.padding 20
+        [
             
+            EBG.color yellow
+            
+        ]
+        (E.column [
+            E.padding 20,
+            E.spacingXY 0 10
         ] [ 
-            viewSearchBar model, viewResults model])
+            viewTitle model,viewSearchBar model, viewResults model])
 
 
 
@@ -312,9 +316,24 @@ viewDrop model =
                 , option [value "12" ] [text "Thriller"] 
                ]
         ]
+
+viewTitle : Model -> E.Element Msg
+viewTitle model=E.row[
+    EF.bold,
+    E.htmlAttribute (Html.Attributes.style "marginLeft" "auto"),
+     E.htmlAttribute (Html.Attributes.style "marginRight" "auto"),
+    EF.italic,
+    EF.size 40 ]
+    [E.text "Movies"]
+viewGenre : Model -> E.Element Msg
+viewGenre model=E.row[
+    EF.bold
+     ]
+    [E.text "Genre:"]
 viewSearchBar : Model -> E.Element Msg
 viewSearchBar model =
-    E.column[E.spacingXY 0 10][
+    E.column[E.spacingXY 0 10
+    ][
     E.wrappedRow[E.spacingXY 10 0]
         [
            
@@ -323,31 +342,31 @@ viewSearchBar model =
                 { onChange = MsgInputTitleField
                 , text = model.title
                 , placeholder = Nothing
-                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00) ] (E.text "Title:")
+                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00), EF.bold ] (E.text "Title:")
                 }
             , EI.search []
                 { onChange = MsgInputDirectorField
                 , text = model.director
                 , placeholder = Nothing
-                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00) ] (E.text "Director:")
+                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00), EF.bold ] (E.text "Director:")
                 }
             , EI.search []
                 { onChange = MsgInputYearField
                 , text = String.fromInt(model.year)
                 , placeholder = Nothing
-                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00) ] (E.text "Year:")
+                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00), EF.bold ] (E.text "Year:")
                 }
             , EI.search []
                 { onChange = MsgInputLinkField
                 , text =  model.link 
                 , placeholder = Nothing
-                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00) ] (E.text "Poster Link:")
+                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00), EF.bold ] (E.text "Poster Link:")
                 }
              ,EI.search []
                 { onChange = MsgInputStar1Field
                 , text = model.star1
                 , placeholder = Nothing
-                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00) ] (E.text "Star1:")
+                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00), EF.bold ] (E.text "Star1:")
                 }
         ],
     E.wrappedRow[E.spacingXY 10 0][
@@ -356,26 +375,26 @@ viewSearchBar model =
                 { onChange = MsgInputStar2Field
                 , text = model.star2
                 , placeholder = Nothing
-                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00) ] (E.text "Star2:")
+                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00), EF.bold ] (E.text "Star2:")
                 }
             , EI.search []
                 { onChange = MsgInputStar3Field
                 , text = model.star3
                 , placeholder = Nothing
-                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00) ] (E.text "Star3:")
+                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00), EF.bold ] (E.text "Star3:")
                 },
                 EI.search []
                 { onChange = MsgInputImdbField
                 , text = (String.fromFloat(model.imdb))
                 , placeholder = Nothing
-                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00) ] (E.text "Imdb Rating:")
+                , label = EI.labelLeft [ EF.color (E.rgb255 0x00 0x00 0x00), EF.bold ] (E.text "Imdb Rating:")
                 },
-               
+             viewGenre model,  
              E.html (viewDrop model)
              , viewButtonGeneric "Add Movie" MsgAddMovie
             
     ],
-    E.wrappedRow[E.spacingXY 10 0][
+    E.wrappedRow[E.spacingXY 10 0, EF.bold][
         E.text "Choose Movie:",
         E.html (viewDeleteMenu model)
         , viewButtonGeneric "Delete Movie" MsgDeleteMovie
@@ -383,7 +402,7 @@ viewSearchBar model =
     E.wrappedRow[EF.color (E.rgb255 255 0 0)][
         viewErroMessage model
     ],
-    E.wrappedRow [E.spacing 5, E.paddingXY 0 12]
+    E.wrappedRow [E.spacing 10, E.paddingXY 0 12]
         [ 
        
         viewMoviesAllButton
@@ -473,7 +492,7 @@ viewMovie : Movie -> E.Element msg
 viewMovie movie= 
     E.row [
         E.paddingEach {top=10 ,right=0 ,bottom=0, left=10},
-        EBG.color (E.rgb255 0xE3 0xEA 0xED),
+        EBG.color (E.rgb255 0 0 0),
         EB.rounded 15,
         E.centerY
     ][
@@ -483,11 +502,11 @@ viewMovie movie=
         E.width (E.px 300)
         ,E.height (E.px 160)
     ][
-        E.paragraph [EF.bold][E.text (movie.title++"("++String.fromInt(movie.year)++")")],
-        E.paragraph [][ E.text ("Director: "++movie.director)],
-        E.paragraph [][ E.text ("Stars:" ++movie.stars)],
-        E.paragraph [][ E.text ("Imdb Score: "++String.fromFloat(movie.imdb))],
-        E.paragraph [][ E.text ("Genre: "++(parseGenre movie.genre))]
+        E.paragraph [EF.bold,EF.color yellow][E.text (movie.title++"("++String.fromInt(movie.year)++")")],
+        E.paragraph [EF.color yellow][ E.text ("Director: "++movie.director)],
+        E.paragraph [EF.color yellow][ E.text ("Stars:" ++movie.stars)],
+        E.paragraph [EF.color yellow][ E.text ("Imdb Score: "++String.fromFloat(movie.imdb))],
+        E.paragraph [EF.color yellow][ E.text ("Genre: "++(parseGenre movie.genre))]
     ]
     ]
 
@@ -732,8 +751,8 @@ decodeMovie =
 viewButtonGeneric : String -> Msg -> E.Element Msg
 viewButtonGeneric naziv msg =
     EI.button
-        [ EBG.color (E.rgb255 0x00 0x33 0x66)
-        , EF.color (E.rgb255 0xEE 0xEE 0xEE)
+        [ EBG.color (E.rgb255 0 0 0)
+        , EF.color yellow
         , EB.rounded 5
         , E.padding 12
         , E.mouseOver
