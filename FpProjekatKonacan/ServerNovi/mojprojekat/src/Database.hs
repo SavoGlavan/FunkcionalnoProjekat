@@ -16,7 +16,7 @@ import BasicSchema
 type PGInfo = ConnectionString
 
 localConnString :: PGInfo
-localConnString = "host=127.0.0.1 port=5432 user=postgres dbname=moviesNew password=zvezda99"
+localConnString = "host=127.0.0.1 port=5432 user=postgres dbname=moviesNew password="
 
 runAction :: PGInfo -> SqlPersistT (LoggingT IO) a -> IO a
 runAction connectionString action = 
